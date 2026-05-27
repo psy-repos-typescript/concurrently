@@ -149,6 +149,15 @@ describe('exiting conditions', () => {
         expect(exit.code).toBe(0);
     });
 
+    it('strips outer CLI wrapper quotes before running a command', async () => {
+        const child = run('"echo foo"');
+        const lines = await child.getLogLines();
+        const exit = await child.exit;
+
+        expect(lines).toContainEqual(expect.stringContaining('foo'));
+        expect(exit.code).toBe(0);
+    });
+
     it('is of failure by default when one of the command fails', async () => {
         const exit = await run('"echo foo" "exit 1"').exit;
 

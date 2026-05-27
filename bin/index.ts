@@ -7,6 +7,7 @@ import { hideBin } from 'yargs/helpers';
 import * as defaults from '../lib/defaults.js';
 import { concurrently } from '../lib/index.js';
 import { castArray, splitOutsideParens } from '../lib/utils.js';
+import { normalizeCliCommand } from './normalize-cli-command.js';
 import { readPackageJson } from './read-package-json.js';
 
 const version = String(readPackageJson().version);
@@ -230,7 +231,7 @@ if (!commands.length) {
 
 concurrently(
     commands.map((command, index) => ({
-        command: String(command),
+        command: normalizeCliCommand(String(command)),
         name: names[index],
     })),
     {
